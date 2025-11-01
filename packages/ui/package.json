@@ -77,9 +77,9 @@
         "yup": "^0.32.9"
     },
     "scripts": {
-        "dev": "vite",
-        "start": "vite",
-        "build": "vite build",
+        "dev": "npx vite",
+        "start": "npx vite",
+        "build": "npx vite build",
         "clean": "rimraf build",
         "nuke": "rimraf build node_modules .turbo"
     },

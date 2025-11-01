@@ -5,7 +5,7 @@
     "main": "dist/src/index",
     "types": "dist/src/index.d.ts",
     "scripts": {
-        "build": "tsc && gulp",
+        "build": "node ../../node_modules/.pnpm/typescript@5.5.2/node_modules/typescript/bin/tsc && npx gulp",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "clean": "rimraf dist",
         "nuke": "rimraf dist node_modules .turbo",
