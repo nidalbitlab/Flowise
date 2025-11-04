@@ -1,5 +1,4 @@
-import logo from '@/assets/images/flowise_white.svg'
-import logoDark from '@/assets/images/flowise_dark.svg'
+import logo from '@/assets/images/dashai_logo.png'
 
 import { useSelector } from 'react-redux'
 
@@ -12,8 +11,8 @@ const Logo = () => {
         <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', marginLeft: '10px' }}>
             <img
                 style={{ objectFit: 'contain', height: 'auto', width: 150 }}
-                src={customization.isDarkMode ? logoDark : logo}
-                alt='Flowise'
+                src={logo}
+                alt='DashAI'
             />
         </div>
     )
