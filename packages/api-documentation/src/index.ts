@@ -1,4 +1,4 @@
-import express, { Request, Response, type RequestHandler } from 'express'
+import express, { Request, Response } from 'express'
 import swaggerUi from 'swagger-ui-express'
 import { swaggerDocs, swaggerExplorerOptions } from './configs/swagger.config'
 
@@ -9,10 +9,7 @@ app.get('/', (req: Request, res: Response) => {
     res.redirect('/api-docs')
 })
 
-// Ensure types align with Express typings in TS: spread serve array and cast setup to RequestHandler
-const swaggerServe = swaggerUi.serve as unknown as RequestHandler[]
-const swaggerSetup = swaggerUi.setup(swaggerDocs, swaggerExplorerOptions) as unknown as RequestHandler
-app.use('/api-docs', ...swaggerServe, swaggerSetup)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, swaggerExplorerOptions))
 
 app.listen(port, () => {
     // eslint-disable-next-line no-console
