@@ -2675,34 +2675,7 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                                                 </>
                                             )}
                                         </div>
-                                        {/* Quick reply buttons parsed from assistant (apiMessage) bullet lines */}
-                                        {message.type === 'apiMessage' && quickReplies.length > 0 && (
-                                            <Box
-                                                sx={{
-                                                    display: 'flex',
-                                                    flexWrap: 'wrap',
-                                                    gap: 1,
-                                                    mt: 1
-                                                }}
-                                            >
-                                                {quickReplies.map((opt, i) => (
-                                                    <Button
-                                                        key={`${message.id || index}-qr-${i}`}
-                                                        size='small'
-                                                        variant='outlined'
-                                                        sx={{
-                                                            borderRadius: '16px',
-                                                            textTransform: 'none',
-                                                            px: 1.5,
-                                                            py: 0.25
-                                                        }}
-                                                        onClick={() => handleSubmit(undefined, opt)}
-                                                    >
-                                                        {opt}
-                                                    </Button>
-                                                ))}
-                                            </Box>
-                                        )}
+                                        {/* Removed duplicate quick reply buttons: list items are clickable instead */}
                                         {message.fileAnnotations && (
                                             <div
                                                 style={{
