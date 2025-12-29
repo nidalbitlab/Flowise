@@ -2362,18 +2362,7 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
         )
     }
 
-    // Extract quick reply options from assistant message text.
-    // Matches lines starting with bullet characters (•, -, *, +) or numbered lists (e.g., 1.) followed by a space.
-    const extractQuickRepliesFromText = (text) => {
-        if (!text || typeof text !== 'string') return []
-        return text
-            .split(/\r?\n/)
-            .map((line) => {
-                const match = line.match(/^\s*(?:[•\-*+]|[0-9]+\.)\s+(.*\S)\s*$/u)
-                return match ? match[1].trim() : null
-            })
-            .filter(Boolean)
-    }
+    // Deprecated: quick reply extraction via plain text is not needed when <li> items are clickable
 
     // Extract plain text from React children (for list items)
     const extractTextFromReact = (node) => {
@@ -2432,7 +2421,6 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                 <div id='messagelist' className={'messagelist'}>
                     {messages &&
                         messages.map((message, index) => {
-                            const quickReplies = message?.type === 'apiMessage' ? extractQuickRepliesFromText(message?.message) : []
                             return (
                                 // The latest message sent by the user will be animated while waiting for a response
                                 <Box
