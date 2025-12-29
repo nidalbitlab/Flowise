@@ -2362,6 +2362,19 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
         )
     }
 
+    // Extract quick reply options from assistant message text.
+    // Matches lines starting with bullet characters (•, -, *) followed by a space.
+    const extractQuickRepliesFromText = (text) => {
+        if (!text || typeof text !== 'string') return []
+        return text
+            .split(/\r?\n/)
+            .map((line) => {
+                const match = line.match(/^\s*(?:[•\-*])\s+(.*\S)\s*$/u)
+                return match ? match[1].trim() : null
+            })
+            .filter(Boolean)
+    }
+
     return (
         <div onDragEnter={handleDrag}>
             {isDragActive && (
@@ -2396,6 +2409,7 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                 <div id='messagelist' className={'messagelist'}>
                     {messages &&
                         messages.map((message, index) => {
+                            const quickReplies = message?.type === 'apiMessage' ? extractQuickRepliesFromText(message?.message) : []
                             return (
                                 // The latest message sent by the user will be animated while waiting for a response
                                 <Box
@@ -2646,6 +2660,34 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                                                 </>
                                             )}
                                         </div>
+                                        {/* Quick reply buttons parsed from assistant (apiMessage) bullet lines */}
+                                        {message.type === 'apiMessage' && quickReplies.length > 0 && (
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexWrap: 'wrap',
+                                                    gap: 1,
+                                                    mt: 1
+                                                }}
+                                            >
+                                                {quickReplies.map((opt, i) => (
+                                                    <Button
+                                                        key={`${message.id || index}-qr-${i}`}
+                                                        size='small'
+                                                        variant='outlined'
+                                                        sx={{
+                                                            borderRadius: '16px',
+                                                            textTransform: 'none',
+                                                            px: 1.5,
+                                                            py: 0.25
+                                                        }}
+                                                        onClick={() => handleSubmit(undefined, opt)}
+                                                    >
+                                                        {opt}
+                                                    </Button>
+                                                ))}
+                                            </Box>
+                                        )}
                                         {message.fileAnnotations && (
                                             <div
                                                 style={{
