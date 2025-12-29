@@ -2388,7 +2388,7 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
     const ClickableLi = ({ children, ...liProps }) => {
         const text = extractTextFromReact(children).trim()
         return (
-            <li
+            <li tt="nidal" 
                 {...liProps}
                 style={{ cursor: text ? 'pointer' : 'default', ...(liProps?.style || {}) }}
                 onClick={() => text && handleSubmit(undefined, text)}
@@ -2677,11 +2677,7 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                                                 </Box>
                                             ) : (
                                                 <>
-                                                    <MemoizedReactMarkdown
-                                                        chatflowid={chatflowid}
-                                                        isFullWidth={isDialog}
-                                                        components={message.type === 'apiMessage' ? { li: ClickableLi } : undefined}
-                                                    >
+                                                    <MemoizedReactMarkdown chatflowid={chatflowid} isFullWidth={isDialog} components={{ li: ClickableLi }}>
                                                         {message.message}
                                                     </MemoizedReactMarkdown>
                                                 </>
