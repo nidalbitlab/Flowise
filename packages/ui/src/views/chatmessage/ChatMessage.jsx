@@ -2363,16 +2363,39 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
     }
 
     // Extract quick reply options from assistant message text.
-    // Matches lines starting with bullet characters (•, -, *) followed by a space.
+    // Matches lines starting with bullet characters (•, -, *, +) or numbered lists (e.g., 1.) followed by a space.
     const extractQuickRepliesFromText = (text) => {
         if (!text || typeof text !== 'string') return []
         return text
             .split(/\r?\n/)
             .map((line) => {
-                const match = line.match(/^\s*(?:[•\-*])\s+(.*\S)\s*$/u)
+                const match = line.match(/^\s*(?:[•\-*+]|[0-9]+\.)\s+(.*\S)\s*$/u)
                 return match ? match[1].trim() : null
             })
             .filter(Boolean)
+    }
+
+    // Extract plain text from React children (for list items)
+    const extractTextFromReact = (node) => {
+        if (node === null || node === undefined) return ''
+        if (typeof node === 'string' || typeof node === 'number') return String(node)
+        if (Array.isArray(node)) return node.map((n) => extractTextFromReact(n)).join('')
+        if (typeof node === 'object' && node.props) return extractTextFromReact(node.props.children)
+        return ''
+    }
+
+    // Clickable <li> for assistant messages: clicking sends the item text as a user message
+    const ClickableLi = ({ children, ...liProps }) => {
+        const text = extractTextFromReact(children).trim()
+        return (
+            <li
+                {...liProps}
+                style={{ cursor: text ? 'pointer' : 'default', ...(liProps?.style || {}) }}
+                onClick={() => text && handleSubmit(undefined, text)}
+            >
+                {children}
+            </li>
+        )
     }
 
     return (
@@ -2654,7 +2677,11 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                                                 </Box>
                                             ) : (
                                                 <>
-                                                    <MemoizedReactMarkdown chatflowid={chatflowid} isFullWidth={isDialog}>
+                                                    <MemoizedReactMarkdown
+                                                        chatflowid={chatflowid}
+                                                        isFullWidth={isDialog}
+                                                        components={message.type === 'apiMessage' ? { li: ClickableLi } : undefined}
+                                                    >
                                                         {message.message}
                                                     </MemoizedReactMarkdown>
                                                 </>
